@@ -10,8 +10,12 @@ module.exports = {
 	save:function(req, res){
 
 		//YOUR CODE GOES HERE
-
-		return res.json("ok");
+		ContactInfo.create(req.allParams(), function (err, contact){
+			if (err) {
+				res.json(err)
+			}
+			res.json(contact)
+		})
 	}
 	
 };

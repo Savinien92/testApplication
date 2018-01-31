@@ -1,0 +1,21 @@
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
+
+.jumbotron {
+    margin-top: 35px;
+}
+
+.alert {
+    margin-bottom: 15px;
+}
+
+#webmasterForm {
+    margin-top: 35px;
+}
