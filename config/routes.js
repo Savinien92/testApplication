@@ -33,12 +33,15 @@ module.exports.routes = {
   *************************************************************/
 
   '/': 'PageController.home',
+  '/admin': 'PageController.admin',
 
 
   // If a request to a URL doesn't match any of the custom routes above,
   // it is matched against Sails route blueprints.  See `config/blueprints.js`
   // for configuration options and examples.
 
-  'POST /saveContactInfo':"ContactInfoController.save",
+  'GET /getContactInfo':'ContactInfoController.get',
+  'POST /saveContactInfo':'ContactInfoController.save',
+  'POST /deleteContactInfo':'ContactInfoController.delete',
 
 };

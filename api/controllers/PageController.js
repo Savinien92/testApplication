@@ -7,10 +7,15 @@
 
  module.exports = {
 
- 	home: function(req, res) {
+ 	home: function (req, res) {
 
  		return res.view('landingpage');
 
  	},
+	admin: function (req, res) {
+
+ 		return res.view('adminpage');
+
+	}
 
  }

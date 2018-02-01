@@ -1,12 +1,9 @@
 var React = require('react'),
-    ReactDOM = require('react-dom');
-
-var $ = require ('jquery');
-
+    ReactDOM = require('react-dom'),
+    $ = require ('jquery')
 
 /*************************************************************
  *************************************************************/
-
 
 var ContactForm = React.createClass({
 
@@ -19,7 +16,7 @@ var ContactForm = React.createClass({
       },
       successRes: null,
       errorRes: null
-    };
+    }
   },
 
   componentDidMount: function () {
@@ -30,13 +27,13 @@ var ContactForm = React.createClass({
 
   },
 
-  setValue: function (e) {
+  _setValue: function (e) {
     const state = this.state.fields
     state[e.target.name] = e.target.value
     this.setState(state)
   },
 
-  errorDisplay: function (name, msg) {
+  _errorDisplay: function (name, msg) {
     // add border red
     $.find('#webmasterForm :input[name='+name+']')[0].classList.add('is-invalid')
     if(msg){
@@ -44,48 +41,50 @@ var ContactForm = React.createClass({
     }
   },
 
-  onSubmit: function (e) {
-    // stop submit form
+  _onSubmit: function (e) {
+    // Stop submit form
     e.preventDefault()
     let flag = true
 
-    // remove all invalid and valid feedback
+    // Remove all invalid and valid feedbacks
     $('.invalid-feedback').remove()
     $('.valid-feedback').remove()
+
+    // Reset alerts
     this.setState({
       successRes: null,
       errorRes: null
     })
 
-    // reset input class
+    // Reset input class
     Object.keys(this.state.fields).map(function (o, o_idx) {
-      let name = o
-      $.find('#webmasterForm :input[name='+name+']')[0].classList.remove('is-invalid')
+      $.find('#webmasterForm :input[name='+o+']')[0].classList.remove('is-invalid')
     })
 
     if(this.state.fields.email === ''){
       flag = false
-      this.errorDisplay('email', 'You need to enter your email')
+      this._errorDisplay('email', 'You need to enter your email')
     }
     if(this.state.fields.name === ''){
       flag = false
-      this.errorDisplay('name', 'You need to enter your name')
+      this._errorDisplay('name', 'You need to enter your name')
     }
     if(this.state.fields.message === ''){
       flag = false
-      this.errorDisplay('message', 'You need to enter your message')
+      this._errorDisplay('message', 'You need to enter your message')
     }
 
     if(flag){
-      // send form
-      this.saveContactInfo(this.state.fields)
+      // Send form
+      this._saveContactInfo(this.state.fields)
     }
 
   },
 
-  saveContactInfo: function (data) {
+  _saveContactInfo: function (data) {
     let that = this
 
+    // Reset alerts
     that.setState({
       successRes: null,
       errorRes: null
@@ -98,23 +97,27 @@ var ContactForm = React.createClass({
       data: data,
       success: function(result) {
         //YOUR CODE GOES HERE
-        console.log('result', result)
         if(result.error){
           let errors = result.invalidAttributes,
               errorMsg = ''
 
+          // Create error message
           Object.keys(errors).map(function(o1, o1_idx){
             let key = o1,
                 errs = errors[o1]
-            that.errorDisplay(key, false)
+            that._errorDisplay(key, false)
             Object.keys(errs).map(function(o2, o2_idx){
               let err = errs[o2]
               errorMsg += errorMsg + err.message
             })
           })
+
+          // Set alert
           that.setState({ errorRes: <div className="alert alert-danger" role="alert">{errorMsg}</div> })
 
         } else {
+
+          // Reset fields and set alert
           that.setState({
             fields: {
               email: '',
@@ -126,13 +129,13 @@ var ContactForm = React.createClass({
       },
       error: function(xhr, status, err) {
         //YOUR CODE GOES HERE
-        console.log('err', err)
-
         if(err){
+
+          // Set alert
           that.setState({ errorRes: <div className="alert alert-danger" role="alert">{JSON.stringify(err)}</div> })
         }
       }
-    });
+    })
   },
 
   render: function() {
@@ -145,10 +148,10 @@ var ContactForm = React.createClass({
     return (
         <div className="container">
           <div className="row">
-            <div className="col-md-6 col-md-offset-3">
+            <div className="col-md-6 col-md-offset-3 flex">
               <div className="jumbotron">
                 <h1>Contact our technical support</h1>
-                <form id="webmasterForm" onSubmit={this.onSubmit}>
+                <form id="webmasterForm" onSubmit={this._onSubmit}>
                   {successRes}
                   {errorRes}
                   <div className="form-group">
@@ -157,7 +160,7 @@ var ContactForm = React.createClass({
                            placeholder="Enter your Email"
                            name="email"
                            value={email}
-                           onChange={this.setValue}/>
+                           onChange={this._setValue}/>
                   </div>
                   <div className="form-group">
                     <input type="text"
@@ -165,7 +168,7 @@ var ContactForm = React.createClass({
                            placeholder="Enter your Name"
                            name="name"
                            value={name}
-                           onChange={this.setValue}/>
+                           onChange={this._setValue}/>
                   </div>
                   <div className="form-group">
                 <textarea className="form-control"
@@ -173,23 +176,23 @@ var ContactForm = React.createClass({
                           placeholder="Your message"
                           name="message"
                           value={message}
-                          onChange={this.setValue}>
+                          onChange={this._setValue}>
                 </textarea>
                   </div>
                   <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
               </div>
+              <a href="/admin" className="btn btn-link">Admin</a>
             </div>
           </div>
         </div>
 
-    );
+    )
   }
 
-});
-
+})
 
 ReactDOM.render(
     <ContactForm/>,
     document.getElementById('containerHome')
-);
+)
